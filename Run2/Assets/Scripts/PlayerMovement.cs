@@ -2,42 +2,18 @@
 
 public class PlayerMovement : MonoBehaviour
 {
-
-    public float speed = 7.0F;
-    public float jumpSpeed = 8.0F;
-    public float gravity = 20.0F;
-    private Vector3 moveDirection = Vector3.zero;
-    public Animator anim;
-    public Collider coll;
+    private Rigidbody rb;
+    public float speed = 3.0f;
 	private void Start()
 	{
-        anim = GetComponent<Animator>();
-        coll = GetComponent<Collider>();
+        rb = GetComponent<Rigidbody>();
+
 	}
-	void Update()
+	void FixedUpdate()
     {
-            
-        CharacterController controller = GetComponent<CharacterController>();
-        if (controller.isGrounded)
-        {
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, 0.0f);
 
-
-            
-            moveDirection = new Vector2(Input.GetAxis("Horizontal"), 0);
-            moveDirection = transform.TransformDirection(moveDirection);
-            moveDirection *= speed;
-            if (Input.GetButton("Jump"))
-            {
-                moveDirection.y = jumpSpeed;
-            }
-                
-
-        } else {
-            moveDirection = new Vector2(Input.GetAxis("Horizontal"),moveDirection.y);
-            moveDirection = transform.TransformDirection(moveDirection);
-            moveDirection.x *= speed / 2;
-        }
-        moveDirection.y -= gravity * Time.deltaTime;
-        controller.Move(moveDirection * Time.deltaTime);
+        rb.AddForce(movement * speed);
     }
 }
